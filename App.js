@@ -8,12 +8,17 @@ import {
   Platform,
   ScrollView
 } from "react-native";
+import { AppLoading } from "expo";
 import ToDo from "./ToDo";
 
 const { height, width } = Dimensions.get("window");
 export default class App extends React.Component {
   state = {
-    newToDo: ""
+    newToDo: "",
+    loadedToDos: false
+  };
+  componentDidMount = () => {
+    this._loadToDos();
   };
 
   _controllNewToDo = text => {
@@ -23,7 +28,10 @@ export default class App extends React.Component {
   };
 
   render() {
-    const { newToDO } = this.state;
+    const { newToDO, loadedToDos } = this.state;
+    if (!loadedToDos) {
+      return <AppLoading />;
+    }
     return (
       <View style={styles.container}>
         <View style={styles.titleContainer}>
@@ -48,6 +56,12 @@ export default class App extends React.Component {
       </View>
     );
   }
+
+  _loadToDos = () => {
+    this.setState({
+      loadedToDos: true
+    });
+  };
 }
 
 const styles = StyleSheet.create({
